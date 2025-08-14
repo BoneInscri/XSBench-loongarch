@@ -4,7 +4,8 @@
 
 # Compiler can be set below, or via environment variable
 ifeq ($(CC),)
-CC    = gcc
+# CC    = gcc
+CC    = loongarch64-linux-gnu-gcc
 endif
 OPTIMIZE    = yes
 OPENMP      = yes
@@ -35,14 +36,17 @@ obj = $(source:.c=.o)
 
 # Make sure we didn't pick up lower case cc
 ifeq (cc,$(CC))
-CC    = gcc
+# CC    = gcc
+CC      = loongarch64-linux-gnu-gcc
 endif
 
 # Standard Flags
-CFLAGS := -std=gnu99 -Wall
+# CFLAGS := -std=gnu99 -Wall
+CFLAGS := -std=gnu99 -Wall -march=loongarch64 -mabi=lp64d
 
 # Linker Flags
-LDFLAGS = -lm
+# LDFLAGS = -lm
+LDFLAGS = -lm -static
 
 # Regular gcc Compiler
 ifneq (,$(findstring gcc,$(CC)))
@@ -84,6 +88,7 @@ endif
 ifeq ($(OPTIMIZE),yes)
   CFLAGS += -O3
 endif
+CFLAGS += -DNO_AVX
 
 # MPI
 ifeq ($(MPI),yes)
